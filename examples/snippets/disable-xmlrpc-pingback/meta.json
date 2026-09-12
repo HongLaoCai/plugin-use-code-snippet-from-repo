@@ -1,0 +1,9 @@
+{
+  "name": "Disable XML-RPC pingback",
+  "slug": "disable-xmlrpc-pingback",
+  "type": "php",
+  "status": "inactive",
+  "scope": "everywhere",
+  "priority": 5,
+  "description": "PHP mẫu scope Everywhere: tắt pingback qua XML-RPC."
+}

@@ -1,0 +1,6 @@
+/* RCS test: highlight page titles on frontend */
+h1.wp-block-heading,
+.entry-title {
+	outline: 2px dashed #0073aa;
+	outline-offset: 6px;
+}

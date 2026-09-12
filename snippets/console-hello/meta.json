@@ -1,0 +1,9 @@
+{
+  "name": "Console hello (JS)",
+  "slug": "console-hello",
+  "type": "js",
+  "status": "inactive",
+  "scope": "frontend",
+  "priority": 10,
+  "description": "JS mẫu: log + thêm data-attribute vào body."
+}

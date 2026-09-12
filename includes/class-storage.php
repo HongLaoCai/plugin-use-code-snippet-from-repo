@@ -314,28 +314,52 @@ class Storage {
 	}
 
 	/**
-	 * Lightweight PHP syntax check via `php -l` when CLI is available.
+	 * PHP syntax check without relying on php-fpm / PHP_BINARY.
+	 *
+	 * Uses token_get_all( …, TOKEN_PARSE ) in-process. Falls back to
+	 * `php -l` only when a real CLI binary is found (never php-fpm).
 	 *
 	 * @param string $code Without opening tag.
 	 * @return true|\WP_Error
 	 */
 	public function validate_php_syntax( $code ) {
+		$source = "<?php\n" . $code;
+
+		if ( defined( 'TOKEN_PARSE' ) ) {
+			try {
+				// TOKEN_PARSE throws ParseError on invalid syntax (PHP 7+).
+				token_get_all( $source, TOKEN_PARSE );
+				return true;
+			} catch ( \ParseError $e ) {
+				return new \WP_Error(
+					'rcs_syntax',
+					sprintf(
+						/* translators: 1: message, 2: line */
+						__( 'PHP syntax error: %1$s on line %2$d', 'repo-code-snippets' ),
+						$e->getMessage(),
+						$e->getLine()
+					)
+				);
+			} catch ( \Throwable $e ) {
+				return new \WP_Error( 'rcs_syntax', $e->getMessage() );
+			}
+		}
+
+		// Older PHP / no TOKEN_PARSE: optional CLI lint.
+		$php = $this->find_php_cli();
+		if ( ! $php ) {
+			return true;
+		}
+
 		$tmp = wp_tempnam( 'rcs-snippet' );
 		if ( ! $tmp ) {
 			return true;
 		}
 
 		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents
-		file_put_contents( $tmp, "<?php\n" . $code );
+		file_put_contents( $tmp, $source );
 
-		$php = $this->find_php_binary();
-		if ( ! $php ) {
-			// phpcs:ignore WordPress.WP.AlternativeFunctions.unlink_unlink
-			unlink( $tmp );
-			return true;
-		}
-
-		$output = array();
+		$output   = array();
 		$code_ret = 0;
 		// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.system_calls_exec
 		exec( escapeshellarg( $php ) . ' -l ' . escapeshellarg( $tmp ) . ' 2>&1', $output, $code_ret );
@@ -351,12 +375,38 @@ class Storage {
 	}
 
 	/**
+	 * Locate a PHP CLI binary suitable for `php -l` (not php-fpm).
+	 *
 	 * @return string|null
 	 */
-	private function find_php_binary() {
-		if ( defined( 'PHP_BINARY' ) && PHP_BINARY && is_executable( PHP_BINARY ) ) {
-			return PHP_BINARY;
+	private function find_php_cli() {
+		$candidates = array();
+
+		if ( defined( 'PHP_BINARY' ) && PHP_BINARY ) {
+			$candidates[] = PHP_BINARY;
 		}
+
+		$candidates = array_merge(
+			$candidates,
+			array(
+				'/usr/bin/php',
+				'/usr/local/bin/php',
+				'/opt/homebrew/bin/php',
+			)
+		);
+
+		foreach ( $candidates as $bin ) {
+			if ( ! $bin || ! is_executable( $bin ) ) {
+				continue;
+			}
+			$base = strtolower( basename( $bin ) );
+			// Local/dev and many hosts set PHP_BINARY to php-fpm — unusable for -l.
+			if ( false !== strpos( $base, 'php-fpm' ) || false !== strpos( $base, 'fpm' ) ) {
+				continue;
+			}
+			return $bin;
+		}
+
 		return null;
 	}
 

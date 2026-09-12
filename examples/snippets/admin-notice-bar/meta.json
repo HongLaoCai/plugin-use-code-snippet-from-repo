@@ -1,0 +1,9 @@
+{
+  "name": "Admin notice bar",
+  "slug": "admin-notice-bar",
+  "type": "php",
+  "status": "inactive",
+  "scope": "admin",
+  "priority": 10,
+  "description": "PHP mẫu chỉ chạy trong wp-admin."
+}

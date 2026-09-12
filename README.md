@@ -45,7 +45,13 @@ Example `meta.json`:
 }
 ```
 
-See `examples/snippets/` in this repository for a ready-made Git folder.
+Ready-made snippets live at the repo root in `snippets/` (also mirrored under `examples/snippets/`).
+
+Point plugin Settings at this repository:
+
+- **Git repository URL:** your clone/remote of this repo
+- **Folder in repo:** `snippets`
+- **Branch:** `main`
 
 ## Git sync workflow
 

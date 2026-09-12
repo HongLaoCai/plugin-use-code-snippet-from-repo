@@ -1,0 +1,9 @@
+{
+  "name": "Frontend highlight box",
+  "slug": "frontend-highlight",
+  "type": "css",
+  "status": "inactive",
+  "scope": "frontend",
+  "priority": 10,
+  "description": "CSS mẫu: viền highlight cho tiêu đề trang."
+}
