@@ -1,0 +1,4 @@
+/* Sample CSS from Git-synced snippets */
+.rcs-example-greeting::before {
+	content: "";
+}
