@@ -2,7 +2,7 @@
   "name": "Blog buttons under H1",
   "slug": "blog-buttons",
   "type": "php",
-  "status": "inactive",
+  "status": "active",
   "scope": "frontend",
   "priority": 10,
   "description": "Chèn 2 nút dưới h1.wp-block-heading: alert Hello World + đổi màu chữ."

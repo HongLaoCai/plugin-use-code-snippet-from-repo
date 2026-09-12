@@ -2,7 +2,7 @@
   "name": "Example styles",
   "slug": "example-styles",
   "type": "css",
-  "status": "inactive",
+  "status": "active",
   "scope": "frontend",
   "priority": 10,
   "description": "Sample CSS snippet."

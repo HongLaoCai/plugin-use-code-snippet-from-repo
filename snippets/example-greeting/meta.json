@@ -2,7 +2,7 @@
   "name": "Example greeting",
   "slug": "example-greeting",
   "type": "php",
-  "status": "inactive",
+  "status": "active",
   "scope": "frontend",
   "priority": 10,
   "description": "Sample PHP snippet for the Git folder layout."

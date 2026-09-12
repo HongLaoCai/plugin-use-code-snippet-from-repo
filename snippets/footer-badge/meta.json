@@ -2,7 +2,7 @@
   "name": "Footer badge (HTML)",
   "slug": "footer-badge",
   "type": "html",
-  "status": "inactive",
+  "status": "active",
   "scope": "frontend",
   "priority": 20,
   "description": "HTML mẫu in ra footer frontend."
